@@ -5,5 +5,5 @@ import (
 )
 
 func main () {
-    println (jcmob.Start ())
+    jcmob.Start ()
 }

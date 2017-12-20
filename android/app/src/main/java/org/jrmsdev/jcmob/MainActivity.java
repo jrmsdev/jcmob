@@ -33,7 +33,8 @@ public class MainActivity extends Activity {
     protected void onResume () {
         super.onResume ();
         try {
-            this.wv.loadUrl (Jcmob.start ());
+            Jcmob.start ();
+            this.wv.loadUrl (Jcmob.addr ());
         } catch (Exception e) {
             Toast.makeText (this, e.toString (), Toast.LENGTH_LONG).show ();
             e.printStackTrace ();

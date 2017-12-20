@@ -7,29 +7,27 @@ import (
     "net/http"
 )
 
-var addr = "127.0.0.1:0"
+var Addr = "127.0.0.1:7666"
 var servemux = http.NewServeMux ()
 
 var server = &http.Server{
-	Addr:           addr,
+	Addr:           Addr,
 	Handler:        servemux,
 	ReadTimeout:    10 * time.Second,
 	WriteTimeout:   10 * time.Second,
 	MaxHeaderBytes: 1 << 20,
 }
 
-func Start () string {
-	listener, err := net.Listen ("tcp4", addr)
-	if err != nil {
-		log.Fatalln (err)
-	}
-    go func() {
-        serr := server.Serve (listener)
-        if serr != nil {
-            log.Fatalln (serr)
-        }
-    }()
-	return listener.Addr ().String ()
+func Start () {
+    listener, err := net.Listen ("tcp4", Addr)
+    if err != nil {
+        log.Fatalln (err)
+    }
+    err = server.Serve (listener)
+    if err != nil {
+        log.Fatalln (err)
+    }
+    //~ return listener.Addr ().String ()
 }
 
 func Stop () {
