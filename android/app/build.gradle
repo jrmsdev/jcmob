@@ -18,6 +18,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
 }
+
+task jcmobAAR(type:Exec) {
+    workingDir '.'
+    commandLine 'gomobile', 'bind', '-o', './libs/jcmob.aar', '../../jcmob'
+}
+
+preBuild.dependsOn(jcmobAAR)
