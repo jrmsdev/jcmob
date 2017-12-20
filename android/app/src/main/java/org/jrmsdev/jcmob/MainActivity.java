@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.net.Uri;
 import android.content.Intent;
 
-import jcmob.Jcmob;
+import go.jcmob.Jcmob;
 
 public class MainActivity extends Activity {
 
