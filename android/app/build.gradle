@@ -23,7 +23,7 @@ dependencies {
 
 task jcmobLibsDir(type:Exec) {
     workingDir '.'
-    commandLine 'mkdir', '-vp', './libs'
+    commandLine 'mkdir', '-p', './libs'
 }
 
 task jcmobAAR(type:Exec) {

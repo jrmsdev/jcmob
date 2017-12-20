@@ -20,21 +20,30 @@ import go.jcmob.Jcmob;
 public class MainActivity extends Activity {
 
     private boolean ENABLE_JS = false;
+    private WebView wv;
 
     @Override
     protected void onCreate (Bundle b) {
         super.onCreate (b);
-        //~ this.externalBrowserStart ();
+        this.wv = this.newWV ();
+        setContentView (this.wv);
     }
 
     @Override
     protected void onResume () {
         super.onResume ();
-        this.webviewResume ();
+        try {
+            this.wv.loadUrl (Jcmob.start ());
+        } catch (Exception e) {
+            Toast.makeText (this, e.toString (), Toast.LENGTH_LONG).show ();
+            e.printStackTrace ();
+            this.finish ();
+        }
     }
 
     @Override
     protected void onPause () {
+        Jcmob.stop ();
         super.onPause ();
     }
 
@@ -43,17 +52,20 @@ public class MainActivity extends Activity {
         super.onDestroy ();
     }
 
+    //~ @Override
+    //~ protected boolean dispatchKeyEvent (KeyEvent event) {
+        //~ if (event.getKeyCode () == KeyEvent.KEYCODE_BACK) {
+            //~ this.finish();
+            //~ return true;
+        //~ }
+        //~ return super.dispatchKeyEvent(event);
+    //~ }
+
     //~ private void externalBrowserStart () {
         //~ Uri uri = Uri.parse (Jcmob.start ());
         //~ Intent intent = new Intent (Intent.ACTION_VIEW, uri);
         //~ startActivity (intent);
     //~ }
-
-    private void webviewResume () {
-        WebView wv = this.newWV ();
-        setContentView (wv);
-        wv.loadUrl (Jcmob.start ());
-    }
 
     private WebView newWV () {
         WebView wv = new WebView (this);
