@@ -43,8 +43,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause () {
-        Jcmob.stop ();
         super.onPause ();
+        Jcmob.stop ();
     }
 
     @Override
