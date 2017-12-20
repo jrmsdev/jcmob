@@ -2,6 +2,8 @@ package org.jrmsdev.jcmob;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+// externalBrowser
 import android.net.Uri;
 import android.content.Intent;
 
@@ -17,9 +19,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume () {
         super.onResume ();
-        Uri uri = Uri.parse (Jcmob.start ());
-        Intent intent = new Intent (Intent.ACTION_VIEW, uri);
-        startActivity (intent);
+        this.externalBrowser ();
     }
 
     @Override
@@ -30,6 +30,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy () {
         super.onDestroy ();
+    }
+
+    private void externalBrowser () {
+        Uri uri = Uri.parse (Jcmob.start ());
+        Intent intent = new Intent (Intent.ACTION_VIEW, uri);
+        startActivity (intent);
     }
 
 }
