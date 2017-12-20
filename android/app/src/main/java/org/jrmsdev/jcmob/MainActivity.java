@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.net.Uri;
 import android.content.Intent;
 
+import jcmob.Jcmob;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -15,7 +17,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume () {
         super.onResume ();
-        Uri uri = Uri.parse ("https://slashdot.com/");
+        Uri uri = Uri.parse (Jcmob.start ());
         Intent intent = new Intent (Intent.ACTION_VIEW, uri);
         startActivity (intent);
     }
