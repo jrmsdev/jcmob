@@ -1,7 +1,7 @@
 package jcmob
 
 import (
-    "github.com/jrmsdev/jcmob/httpd"
+    "github.com/jrmsdev/jcmob/internal/httpd"
     _ "github.com/jrmsdev/jcmob/internal/webapps"
 )
 

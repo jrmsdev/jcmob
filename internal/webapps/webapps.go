@@ -2,7 +2,7 @@ package webapps
 
 import (
     "net/http"
-    "github.com/jrmsdev/jcmob/httpd"
+    "github.com/jrmsdev/jcmob/internal/httpd"
 )
 
 func init() {
