@@ -9,6 +9,7 @@ import (
 
 var addr = "127.0.0.1:7666"
 var servemux = http.NewServeMux ()
+var listener net.Listener
 
 var server = &http.Server{
 	Addr:           addr,
@@ -18,16 +19,24 @@ var server = &http.Server{
 	MaxHeaderBytes: 1 << 20,
 }
 
-func Start () string {
-    listener, err := net.Listen ("tcp4", addr)
-    if err != nil {
-        log.Fatalln (err)
-    }
-    err = server.Serve (listener)
+func Listen () string {
+    var err error
+    listener, err = net.Listen ("tcp4", addr)
     if err != nil {
         log.Fatalln (err)
     }
     return listener.Addr ().String ()
+}
+
+func Serve () {
+    if listener == nil {
+        log.Fatalln ("nil listener... call httpd.Listen() first")
+    }
+    var err error
+    err = server.Serve (listener)
+    if err != nil {
+        log.Fatalln (err)
+    }
 }
 
 func Stop () {

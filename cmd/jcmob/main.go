@@ -6,10 +6,18 @@ import (
 )
 
 func main () {
-    println ("starting...")
-    resize := true
+    println ("listen")
+    uri := "http://" + jcmob.Listen () + "/"
+    println ("listen uri:", uri)
+
+    println ("serve")
     go func() {
-        jcmob.Start ()
+        jcmob.Serve ()
     }()
-    webview.Open ("JCMobile", "http://127.0.0.1:7666/", 800, 600, resize)
+
+    resize := true
+    webview.Open ("JCMobile", uri, 800, 600, resize)
+
+    println ("stop")
+    jcmob.Stop ()
 }

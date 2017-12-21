@@ -6,8 +6,12 @@ import (
     _ "github.com/jrmsdev/jcmob/internal/webapps"
 )
 
-func Start () string {
-    return httpd.Start ()
+func Listen () string {
+    return httpd.Listen ()
+}
+
+func Serve () {
+    httpd.Serve ()
 }
 
 func Stop () {
