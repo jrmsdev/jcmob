@@ -2,18 +2,17 @@
 package jcmob
 
 import (
-    "github.com/jrmsdev/jcmob/internal/httpd"
-    _ "github.com/jrmsdev/jcmob/internal/webapps"
+    "github.com/jrmsdev/go-jcms/jcms"
 )
 
 func Listen () string {
-    return httpd.Listen ()
+    return jcms.Listen ()
 }
 
 func Serve () {
-    httpd.Serve ()
+    jcms.Serve ()
 }
 
 func Stop () {
-    httpd.Stop ()
+    jcms.Stop ()
 }
