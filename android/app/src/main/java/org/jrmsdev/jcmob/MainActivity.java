@@ -6,99 +6,82 @@ import android.content.Intent;
 import android.widget.Toast;
 import android.util.Log;
 
-// bind service
-import android.os.IBinder;
-import android.content.Context;
-import android.content.ComponentName;
-import android.content.ServiceConnection;
+import android.webkit.WebView;
+import android.webkit.WebSettings;
+import android.webkit.WebViewClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceError;
 
 public class MainActivity extends Activity {
 
-    private JcmobService mService;
-    private boolean mBound;
+    private WebView wv;
+    private static boolean ENABLE_JS = false;
+    private static JcmobServer server = new JcmobServer ();
 
     @Override
     protected void onCreate (Bundle b) {
-        Log.d ("Jcmob", "OnCreate");
+        Log.d ("JcmobMain", "OnCreate");
         super.onCreate (b);
+        this.server.start ();
     }
 
     @Override
     protected void onStart () {
-        Log.d ("Jcmob", "OnStart");
+        Log.d ("JcmobMain", "OnStart");
         super.onStart ();
-        this.doBindService ();
-        this.webViewStart ();
+        this.wv = this.newWV ();
+        this.setContentView (this.wv);
     }
 
     @Override
     protected void onResume () {
-        Log.d ("Jcmob", "OnResume");
+        Log.d ("JcmobMain", "OnResume");
         super.onResume ();
+        this.wv.loadUrl ("http://127.0.0.1:7666/");
     }
 
     @Override
     protected void onPause () {
-        Log.d ("Jcmob", "OnPause");
+        Log.d ("JcmobMain", "OnPause");
         super.onPause ();
     }
 
     @Override
     protected void onStop () {
-        Log.d ("Jcmob", "OnStop");
+        Log.d ("JcmobMain", "OnStop");
         super.onStop ();
-        this.doUnbindService ();
     }
 
     @Override
     protected void onDestroy () {
-        Log.d ("Jcmob", "OnDestroy");
+        Log.d ("JcmobMain", "OnDestroy");
         super.onDestroy ();
     }
 
-    // Web View
+    // web view
 
-    private void webViewStart () {
-        Log.d ("Jcmob", "start web view activity");
-        Intent wv = new Intent (this, WebViewActivity.class);
-        this.startActivity (wv);
+    private WebView newWV () {
+        Log.d ("JcmobMain", "new webview");
+        WebView wv = new WebView (this);
+        this.wvSettings (wv);
+        return wv;
     }
 
-    // Bind Service
-
-    private ServiceConnection mConnection = new ServiceConnection () {
-
-        @Override
-        public void onServiceConnected (ComponentName className, IBinder service) {
-            JcmobService.LocalBinder binder = (JcmobService.LocalBinder) service;
-            mService = binder.getService ();
-            mBound = true;
-            Log.d ("Jcmob", "service connected");
-        }
-
-        @Override
-        public void onServiceDisconnected (ComponentName className) {
-            mBound = false;
-            Log.d ("Jcmob", "service disconnected");
-        }
-
-    };
-
-    protected void doBindService () {
-        Log.d ("Jcmob", "bind service");
-        mBound = false;
-        Intent intent = new Intent (this, JcmobService.class);
-        bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
+    private void wvSettings (WebView wv) {
+        Log.d ("JcmobMain", "webview settings");
+        WebSettings ws = wv.getSettings ();
+        ws.setJavaScriptEnabled (this.ENABLE_JS);
+        this.wvClient (wv);
     }
 
-    private void doUnbindService() {
-        if (mBound) {
-            Log.d ("Jcmob", "unbind service");
-            unbindService (mConnection);
-            mBound = false;
-        } else {
-            Log.d ("Jcmob", "unbind service: not bound!");
-        }
+    private void wvClient (WebView wv) {
+        Log.d ("JcmobMain", "set webview client");
+        final Activity activity = this;
+        wv.setWebViewClient (new WebViewClient () {
+            public void onReceivedError (WebView view, WebResourceRequest req, WebResourceError error) {
+                Toast.makeText (activity, error.getDescription (), Toast.LENGTH_SHORT).show ();
+            }
+        });
     }
 
 }
