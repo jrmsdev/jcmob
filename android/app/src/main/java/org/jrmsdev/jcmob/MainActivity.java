@@ -1,5 +1,7 @@
 package org.jrmsdev.jcmob;
 
+import java.lang.String;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,16 +14,20 @@ import android.webkit.WebViewClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceError;
 
+import go.jcmob.Jcmob;
+
 public class MainActivity extends Activity {
 
     private WebView wv;
     private static boolean ENABLE_JS = false;
     private static JcmobServer server = new JcmobServer ();
+    private String serverUri;
 
     @Override
     protected void onCreate (Bundle b) {
         Log.d ("JcmobMain", "OnCreate");
         super.onCreate (b);
+        this.serverUri = Jcmob.listen ();
         this.server.start ();
     }
 
@@ -37,7 +43,7 @@ public class MainActivity extends Activity {
     protected void onResume () {
         Log.d ("JcmobMain", "OnResume");
         super.onResume ();
-        this.wv.loadUrl ("http://127.0.0.1:7666/");
+        this.wv.loadUrl (this.serverUri);
     }
 
     @Override
@@ -55,6 +61,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy () {
         Log.d ("JcmobMain", "OnDestroy");
+        Jcmob.stop ();
         super.onDestroy ();
     }
 

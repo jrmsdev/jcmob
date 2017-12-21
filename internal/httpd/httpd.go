@@ -25,7 +25,7 @@ func Listen () string {
     if err != nil {
         log.Fatalln (err)
     }
-    return listener.Addr ().String ()
+    return "http://" + listener.Addr ().String () + "/"
 }
 
 func Serve () {

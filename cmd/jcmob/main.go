@@ -7,7 +7,7 @@ import (
 
 func main () {
     println ("listen")
-    uri := "http://" + jcmob.Listen () + "/"
+    uri := jcmob.Listen ()
     println ("listen uri:", uri)
 
     println ("serve")

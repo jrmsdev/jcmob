@@ -9,6 +9,6 @@ public class JcmobServer extends Thread {
     @Override
     public void run () {
         Log.d ("JcmobServer", "run");
-        Jcmob.start ();
+        Jcmob.serve ();
     }
 }
