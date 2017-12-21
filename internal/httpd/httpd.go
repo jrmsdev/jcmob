@@ -7,7 +7,7 @@ import (
     "net/http"
 )
 
-var addr = "127.0.0.1:0"
+var addr = "127.0.0.1:7666"
 var servemux = http.NewServeMux ()
 
 var server = &http.Server{

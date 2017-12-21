@@ -55,6 +55,8 @@ public class MainActivity extends Activity {
             }
         } else {
             Log.d ("Jcmob", "OnResume: service not bound");
+            this.wv.loadData ("<html> <head> <title>JCMob loading...</title> </head> <body> <p> <a href='http://127.0.0.1:7666/'>JCMob</a> </p> </body> </html>",
+                    "text/html", null);
         }
     }
 
