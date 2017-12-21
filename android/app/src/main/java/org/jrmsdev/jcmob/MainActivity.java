@@ -1,11 +1,16 @@
 package org.jrmsdev.jcmob;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.widget.Toast;
+import android.util.Log;
 
-// external browser
-//~ import android.net.Uri;
-//~ import android.content.Intent;
+// bind service
+import android.os.IBinder;
+import android.content.Context;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 
 // webview
 import android.webkit.WebView;
@@ -13,43 +18,67 @@ import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceError;
-import android.widget.Toast;
-
-import go.jcmob.Jcmob;
 
 public class MainActivity extends Activity {
 
     private boolean ENABLE_JS = false;
     private WebView wv;
+    private JcmobService mService;
+    private boolean mBound;
 
     @Override
     protected void onCreate (Bundle b) {
+        Log.d ("Jcmob", "OnCreate");
         super.onCreate (b);
         this.wv = this.newWV ();
-        setContentView (this.wv);
+        this.setContentView (this.wv);
+    }
+
+    @Override
+    protected void onStart () {
+        Log.d ("Jcmob", "OnStart");
+        super.onStart ();
+        this.doBindService ();
     }
 
     @Override
     protected void onResume () {
         super.onResume ();
-        try {
-            Jcmob.start ();
-            this.wv.loadUrl (Jcmob.addr ());
-        } catch (Exception e) {
-            Toast.makeText (this, e.toString (), Toast.LENGTH_LONG).show ();
-            e.printStackTrace ();
-            this.finish ();
+        if (mBound) {
+            Log.d ("Jcmob", "OnResume");
+            try {
+                this.wv.loadUrl (mService.startServer ());
+            } catch (Exception e) {
+                Toast.makeText (this, e.toString (), Toast.LENGTH_LONG).show ();
+                e.printStackTrace ();
+                this.finish ();
+            }
+        } else {
+            Log.d ("Jcmob", "OnResume: service not bound");
         }
     }
 
     @Override
     protected void onPause () {
         super.onPause ();
-        Jcmob.stop ();
+        if (mBound) {
+            Log.d ("Jcmob", "OnPause");
+            mService.stopServer ();
+        } else {
+            Log.d ("Jcmob", "OnPause: service not bound");
+        }
+    }
+
+    @Override
+    protected void onStop () {
+        Log.d ("Jcmob", "OnStop");
+        super.onStop ();
+        this.doUnbindService ();
     }
 
     @Override
     protected void onDestroy () {
+        Log.d ("Jcmob", "OnDestroy");
         super.onDestroy ();
     }
 
@@ -62,25 +91,24 @@ public class MainActivity extends Activity {
         //~ return super.dispatchKeyEvent(event);
     //~ }
 
-    //~ private void externalBrowserStart () {
-        //~ Uri uri = Uri.parse (Jcmob.start ());
-        //~ Intent intent = new Intent (Intent.ACTION_VIEW, uri);
-        //~ startActivity (intent);
-    //~ }
+    // Web View
 
     private WebView newWV () {
+        Log.d ("Jcmob", "new WV");
         WebView wv = new WebView (this);
         this.wvSettings (wv);
         return wv;
     }
 
     private void wvSettings (WebView wv) {
+        Log.d ("Jcmob", "WV settings");
         WebSettings ws = wv.getSettings ();
         ws.setJavaScriptEnabled (this.ENABLE_JS);
         this.wvClient (wv);
     }
 
     private void wvClient (WebView wv) {
+        Log.d ("Jcmob", "WV client");
         final Activity activity = this;
         wv.setWebViewClient (new WebViewClient () {
             public void onReceivedError (WebView view, WebResourceRequest req, WebResourceError error) {
@@ -88,4 +116,42 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+    // Bind Service
+
+    private ServiceConnection mConnection = new ServiceConnection () {
+
+        @Override
+        public void onServiceConnected (ComponentName className, IBinder service) {
+            JcmobService.LocalBinder binder = (JcmobService.LocalBinder) service;
+            mService = binder.getService ();
+            mBound = true;
+            Log.d ("Jcmob", "service connected");
+        }
+
+        @Override
+        public void onServiceDisconnected (ComponentName className) {
+            mBound = false;
+            Log.d ("Jcmob", "service disconnected");
+        }
+
+    };
+
+    protected void doBindService () {
+        Log.d ("Jcmob", "bind service");
+        mBound = false;
+        Intent intent = new Intent (this, JcmobService.class);
+        bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void doUnbindService() {
+        if (mBound) {
+            Log.d ("Jcmob", "unbind service");
+            unbindService (mConnection);
+            mBound = false;
+        } else {
+            Log.d ("Jcmob", "unbind service: not bound!");
+        }
+    }
+
 }

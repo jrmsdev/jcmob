@@ -1,3 +1,4 @@
+// gomobile bind -lang=java
 package jcmob
 
 import (
@@ -5,13 +6,8 @@ import (
     _ "github.com/jrmsdev/jcmob/internal/webapps"
 )
 
-func Addr () string {
-    return httpd.Addr
-}
-
-func Start () {
-    println ("http://" + Addr () + "/")
-    httpd.Start ()
+func Start () string {
+    return httpd.Start ()
 }
 
 func Stop () {
