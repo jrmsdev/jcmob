@@ -5,5 +5,5 @@ import (
 )
 
 func main () {
-    cli.Webview ()
+    cli.Main ()
 }
