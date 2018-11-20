@@ -2,17 +2,17 @@
 package jcmob
 
 import (
-    "github.com/jrmsdev/go-jcms/lib/jcms"
+	"github.com/jrmsdev/go-jcms/lib/jcms"
 )
 
-func Listen () string {
-    return jcms.Listen ()
+func Listen() string {
+	return jcms.Listen()
 }
 
-func Serve () {
-    jcms.Serve ()
+func Serve() {
+	jcms.Serve()
 }
 
-func Stop () {
-    jcms.Stop ()
+func Stop() {
+	jcms.Stop()
 }

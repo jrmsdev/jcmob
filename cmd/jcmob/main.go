@@ -6,7 +6,7 @@ import (
 	"github.com/jrmsdev/jcmob"
 )
 
-func main () {
+func main() {
 	defer jcmob.Stop()
 	fmt.Println(jcmob.Listen())
 	jcmob.Serve()
