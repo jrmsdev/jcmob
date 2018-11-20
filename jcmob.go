@@ -2,7 +2,7 @@
 package jcmob
 
 import (
-    "github.com/jrmsdev/go-jcms/jcms"
+    "github.com/jrmsdev/go-jcms/lib/jcms"
 )
 
 func Listen () string {

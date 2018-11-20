@@ -1,9 +1,13 @@
 package main
 
 import (
-    "github.com/jrmsdev/go-jcms/jcms/cli"
+	"fmt"
+
+	"github.com/jrmsdev/jcmob"
 )
 
 func main () {
-    cli.Main ()
+	defer jcmob.Stop()
+	fmt.Println(jcmob.Listen())
+	jcmob.Serve()
 }
