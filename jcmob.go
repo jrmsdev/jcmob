@@ -1,4 +1,5 @@
-// gomobile bind -lang=java
+// gomobile bind -target=android -javapkg go
+
 package jcmob
 
 import (
@@ -7,16 +8,23 @@ import (
 	"github.com/jrmsdev/go-jcms/lib/jcms"
 )
 
-func Listen() string {
-	return jcms.Listen()
-}
+var donec = make(chan string)
 
-func Serve() {
-	jcms.Serve()
+func Start() string {
+	uri := jcms.Listen()
+	go func() {
+		jcms.Serve()
+		donec <- "done"
+	}()
+	return uri
 }
 
 func Stop() {
 	jcms.Stop()
+}
+
+func WaitDone() string {
+	return <-donec
 }
 
 func SetBaseDir(path string) {

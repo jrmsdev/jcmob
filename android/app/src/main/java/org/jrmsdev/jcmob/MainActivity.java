@@ -20,27 +20,25 @@ public class MainActivity extends Activity {
 
 	private WebView wv;
 	private static boolean ENABLE_JS = false;
-	private static JcmobServer server = new JcmobServer ();
 	private String serverUri;
+	private String baseDir;
 	private String dataDir;
-	private String siteDir;
 
 	@Override
 	protected void onCreate (Bundle b) {
 		Log.d ("JcmobMain", "OnCreate");
 		super.onCreate (b);
 
-		this.dataDir = getDir ("jcmob", 0).getAbsolutePath ();
-		File sd = new File (getExternalFilesDir (null), "jcmob");
-		this.siteDir = sd.getAbsolutePath ();
+		this.baseDir = getDir ("jcmob", 0).getAbsolutePath ();
+		Log.d ("JcmobMain baseDir", this.baseDir);
+		Jcmob.setBaseDir (this.baseDir);
+
+		this.dataDir = getFilesDir ().getAbsolutePath ();
 		Log.d ("JcmobMain dataDir", this.dataDir);
-		Log.d ("JcmobMain siteDir", this.siteDir);
-		Jcmob.setBaseDir (this.siteDir);
 		Jcmob.setDataDir (this.dataDir);
 
-		this.serverUri = Jcmob.listen ();
+		this.serverUri = Jcmob.start ();
 		Log.d ("JcmobMain serverUri", this.serverUri);
-		this.server.start ();
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onResume () {
-		Log.d ("JcmobMain", "OnResume");
+		Log.d ("JcmobMain OnResume", this.serverUri);
 		super.onResume ();
 		this.wv.loadUrl (this.serverUri);
 	}
