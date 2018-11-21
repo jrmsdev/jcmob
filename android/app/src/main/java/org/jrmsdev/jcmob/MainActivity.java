@@ -1,10 +1,10 @@
 package org.jrmsdev.jcmob;
 
 import java.lang.String;
+import java.io.File;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.widget.Toast;
 import android.util.Log;
 
@@ -22,12 +22,24 @@ public class MainActivity extends Activity {
 	private static boolean ENABLE_JS = false;
 	private static JcmobServer server = new JcmobServer ();
 	private String serverUri;
+	private String dataDir;
+	private String siteDir;
 
 	@Override
 	protected void onCreate (Bundle b) {
 		Log.d ("JcmobMain", "OnCreate");
 		super.onCreate (b);
+
+		this.dataDir = getDir ("jcmob", 0).getAbsolutePath ();
+		File sd = new File (getExternalFilesDir (null), "jcmob");
+		this.siteDir = sd.getAbsolutePath ();
+		Log.d ("JcmobMain dataDir", this.dataDir);
+		Log.d ("JcmobMain siteDir", this.siteDir);
+		Jcmob.setBaseDir (this.siteDir);
+		Jcmob.setDataDir (this.dataDir);
+
 		this.serverUri = Jcmob.listen ();
+		Log.d ("JcmobMain serverUri", this.serverUri);
 		this.server.start ();
 	}
 
