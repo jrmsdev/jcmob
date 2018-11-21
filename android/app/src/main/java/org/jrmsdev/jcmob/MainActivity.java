@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 	private WebView wv;
 	private static boolean ENABLE_JS = false;
 	private String serverUri;
+	private String appName;
 	private String baseDir;
 	private String dataDir;
 
@@ -28,6 +29,10 @@ public class MainActivity extends Activity {
 	protected void onCreate (Bundle b) {
 		Log.d ("JcmobMain", "OnCreate");
 		super.onCreate (b);
+
+		this.appName = getString (R.string.app_name);
+		Log.d ("JcmobMain appName", this.appName);
+		Jcmob.setAppName (this.appName);
 
 		this.baseDir = getDir ("jcmob", 0).getAbsolutePath ();
 		Log.d ("JcmobMain baseDir", this.baseDir);

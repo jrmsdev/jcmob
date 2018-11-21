@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">JCMobile</string>
+    <string name="app_name">default</string>
+    <string name="app_label">jcmob default</string>
 </resources>

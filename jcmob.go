@@ -38,3 +38,9 @@ func SetDataDir(path string) {
 		panic(err)
 	}
 }
+
+func SetAppName(name string) {
+	if err := os.Setenv("JCMS_WEBAPP", name); err != nil {
+		panic(err)
+	}
+}
