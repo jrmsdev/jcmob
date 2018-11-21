@@ -1,8 +1,6 @@
 package org.jrmsdev.jcmob;
 
 import java.lang.String;
-import java.io.File;
-import java.io.IOException;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -23,7 +21,6 @@ public class MainActivity extends Activity {
 	private static boolean ENABLE_JS = false;
 	private String serverUri;
 	private String appName;
-	private String baseDir;
 	private String dataDir;
 
 	@Override
@@ -35,23 +32,6 @@ public class MainActivity extends Activity {
 		this.appName = getString (R.string.app_name);
 		Log.d ("JcmobMain appName", this.appName);
 		Jcmob.setAppName (this.appName);
-
-		// set base dir
-		try {
-			// use assets
-			String[] l = getAssets ().list ("");
-			if (l != null) {
-				this.baseDir = l[0];
-			} else {
-				this.baseDir = "EBASEDIR";
-			}
-		} catch (IOException exc) {
-			Log.d ("JcmbMain", "IOException");
-			// default to data dir
-			this.baseDir = getDir ("jcmob", 0).getAbsolutePath ();
-		}
-		Log.d ("JcmobMain baseDir", this.baseDir);
-		Jcmob.setBaseDir (this.baseDir);
 
 		// set data dir
 		this.dataDir = getFilesDir ().getAbsolutePath ();
@@ -103,6 +83,7 @@ public class MainActivity extends Activity {
 		Log.d ("JcmobMain", "new webview");
 		WebView wv = new WebView (this);
 		this.wvSettings (wv);
+		this.wvClient (wv);
 		return wv;
 	}
 
@@ -110,7 +91,6 @@ public class MainActivity extends Activity {
 		Log.d ("JcmobMain", "webview settings");
 		WebSettings ws = wv.getSettings ();
 		ws.setJavaScriptEnabled (this.ENABLE_JS);
-		this.wvClient (wv);
 	}
 
 	private void wvClient (WebView wv) {

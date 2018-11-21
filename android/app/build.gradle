@@ -26,13 +26,19 @@ task jcmobAssets(type:Exec) {
     commandLine 'sh', './build-assets.sh'
 }
 
-task jcmobAAR(type:Exec) {
+task jcmobBuild(type:Exec) {
     workingDir '.'
     commandLine 'sh', './build-jcmob.sh'
 }
 
-jcmobAAR.dependsOn(jcmobAssets)
-preBuild.dependsOn(jcmobAAR)
+task jcmobAAR(type:Exec) {
+    workingDir '.'
+    commandLine 'sh', './build-jcmob-aar.sh'
+}
+
+jcmobAAR.dependsOn(jcmobBuild)
+jcmobAssets.dependsOn(jcmobAAR)
+preBuild.dependsOn(jcmobAssets)
 
 task jcmobClean(type:Exec) {
     workingDir '.'

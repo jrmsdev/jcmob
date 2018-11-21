@@ -11,6 +11,7 @@ import (
 var donec = make(chan string)
 
 func Start() string {
+	jcms.SetAssetManager(newAssetManager())
 	uri := jcms.Listen()
 	go func() {
 		jcms.Serve()
@@ -25,12 +26,6 @@ func Stop() {
 
 func WaitDone() string {
 	return <-donec
-}
-
-func SetBaseDir(path string) {
-	if err := os.Setenv("JCMS_BASEDIR", path); err != nil {
-		panic(err)
-	}
 }
 
 func SetDataDir(path string) {
