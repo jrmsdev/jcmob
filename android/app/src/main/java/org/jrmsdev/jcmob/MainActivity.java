@@ -2,6 +2,7 @@ package org.jrmsdev.jcmob;
 
 import java.lang.String;
 import java.io.File;
+import java.io.IOException;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -30,18 +31,34 @@ public class MainActivity extends Activity {
 		Log.d ("JcmobMain", "OnCreate");
 		super.onCreate (b);
 
+		// set app name
 		this.appName = getString (R.string.app_name);
 		Log.d ("JcmobMain appName", this.appName);
 		Jcmob.setAppName (this.appName);
 
-		this.baseDir = getDir ("jcmob", 0).getAbsolutePath ();
+		// set base dir
+		try {
+			// use assets
+			String[] l = getAssets ().list ("");
+			if (l != null) {
+				this.baseDir = l[0];
+			} else {
+				this.baseDir = "EBASEDIR";
+			}
+		} catch (IOException exc) {
+			Log.d ("JcmbMain", "IOException");
+			// default to data dir
+			this.baseDir = getDir ("jcmob", 0).getAbsolutePath ();
+		}
 		Log.d ("JcmobMain baseDir", this.baseDir);
 		Jcmob.setBaseDir (this.baseDir);
 
+		// set data dir
 		this.dataDir = getFilesDir ().getAbsolutePath ();
 		Log.d ("JcmobMain dataDir", this.dataDir);
 		Jcmob.setDataDir (this.dataDir);
 
+		// start server
 		this.serverUri = Jcmob.start ();
 		Log.d ("JcmobMain serverUri", this.serverUri);
 	}

@@ -21,16 +21,22 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['jcmob.aar'])
 }
 
+task jcmobAssets(type:Exec) {
+    workingDir '.'
+    commandLine 'sh', './build-assets.sh'
+}
+
 task jcmobAAR(type:Exec) {
     workingDir '.'
     commandLine 'sh', './build-jcmob.sh'
 }
 
+jcmobAAR.dependsOn(jcmobAssets)
 preBuild.dependsOn(jcmobAAR)
 
 task jcmobClean(type:Exec) {
     workingDir '.'
-    commandLine 'rm', '-rf', './libs'
+    commandLine 'rm', '-rfv', './libs', './src/main/assets'
 }
 
 clean.dependsOn(jcmobClean)
