@@ -21,17 +21,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['jcmob.aar'])
 }
 
-task jcmobLibsDir(type:Exec) {
-    workingDir '.'
-    commandLine 'mkdir', '-p', './libs'
-}
-
 task jcmobAAR(type:Exec) {
     workingDir '.'
-    commandLine 'gomobile', 'bind', '-target', 'android', '-javapkg', 'go', '-o', './libs/jcmob.aar', './../../../jcmob'
+    commandLine 'sh', './build-jcmob.sh'
 }
 
-jcmobAAR.dependsOn(jcmobLibsDir)
 preBuild.dependsOn(jcmobAAR)
 
 task jcmobClean(type:Exec) {
