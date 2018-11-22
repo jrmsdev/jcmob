@@ -33,9 +33,11 @@ func (m *assetManager) ReadFile(name string) ([]byte, error) {
 }
 
 var modTime time.Time
+var infoCache map[string]*fileInfo
 
 func init() {
 	modTime = time.Now()
+	infoCache = make(map[string]*fileInfo)
 }
 
 type fileInfo struct{
@@ -44,17 +46,21 @@ type fileInfo struct{
 }
 
 func newFileInfo(name string) (*fileInfo, error) {
-	fh, err := asset.Open(name)
-	if err != nil {
-		return nil, err
+	_, found := infoCache[name]
+	if !found {
+		fh, err := asset.Open(name)
+		if err != nil {
+			return nil, err
+		}
+		buf, readErr := ioutil.ReadAll(fh)
+		if readErr != nil {
+			return nil, readErr
+		}
+		sz := int64(len(buf))
+		buf = nil
+		infoCache[name] = &fileInfo{name, sz}
 	}
-	buf, readErr := ioutil.ReadAll(fh)
-	if readErr != nil {
-		return nil, readErr
-	}
-	sz := int64(len(buf))
-	buf = nil
-	return &fileInfo{name, sz}, nil
+	return infoCache[name], nil
 }
 
 func (i *fileInfo) Name() string {
