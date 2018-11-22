@@ -56,9 +56,8 @@ func newFileInfo(name string) (*fileInfo, error) {
 		if readErr != nil {
 			return nil, readErr
 		}
-		sz := int64(len(buf))
+		infoCache[name] = &fileInfo{name, int64(len(buf))}
 		buf = nil
-		infoCache[name] = &fileInfo{name, sz}
 	}
 	return infoCache[name], nil
 }
