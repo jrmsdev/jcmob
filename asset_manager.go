@@ -1,8 +1,8 @@
 package jcmob
 
 import (
-	"os"
 	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/jrmsdev/go-jcms/lib/jcms/api"
@@ -40,7 +40,7 @@ func init() {
 	infoCache = make(map[string]*fileInfo)
 }
 
-type fileInfo struct{
+type fileInfo struct {
 	name string
 	size int64
 }
