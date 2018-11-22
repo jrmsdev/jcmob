@@ -52,9 +52,10 @@ func newFileInfo(name string) (*fileInfo, error) {
 		if err != nil {
 			return nil, err
 		}
+		defer fh.Close()
 		buf, readErr := ioutil.ReadAll(fh)
 		if readErr != nil {
-			return nil, readErr
+			return nil, os.ErrNotExist
 		}
 		infoCache[name] = &fileInfo{name, int64(len(buf))}
 		buf = nil
