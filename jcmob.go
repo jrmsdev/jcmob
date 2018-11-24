@@ -12,7 +12,7 @@ var donec = make(chan string)
 
 func Start() string {
 	jcms.SetAssetManager(newAssetManager())
-	uri := jcms.Listen()
+	uri := jcms.Listen("127.0.0.1:0")
 	go func() {
 		jcms.Serve()
 		donec <- "done"
