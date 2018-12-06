@@ -12,6 +12,6 @@ go clean -i ./vendor/golang.org/x/mobile/cmd/gobind
 go install -i ./vendor/golang.org/x/mobile/cmd/gobind
 
 gomobile clean || true
-echo gomobile init -ndk $ANDROID_HOME/ndk-bundle
+gomobile init -ndk $ANDROID_HOME/ndk-bundle
 
 exit 0
